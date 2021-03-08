@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, url_for, redirect
 
 app = Flask(__name__)
 
+app.config['DEBUG'] = True
 
 @app.route('/')
 def index():
@@ -59,4 +60,4 @@ def jsonprocess():
     return jsonify({'try' : 'error', 'Name' : name, 'Location' : location, 'color' : color[1]}) 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
