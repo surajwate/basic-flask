@@ -1,9 +1,28 @@
-from flask import Flask, jsonify, request, url_for, redirect, session, render_template
+from flask import Flask, jsonify, request, url_for, redirect, session, render_template, g
+import sqlite3
 
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'THISISASECRET'
+
+
+def connect_db():
+    sql = sqlite3.connect('D:\\Suraj\\Coding\\python\\databases\\fadb')
+    sql.row_factory = sqlite3.Row
+    return sql
+
+
+def get_db():
+    if not hasattr(g, 'sqlite3'):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
+
+
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'sqlite_db'):
+        g.sqlite_db.close()
 
 
 @app.route('/')
@@ -61,6 +80,14 @@ def jsonprocess():
     location = data['location']
     color = data['color']
     return jsonify({'try': 'error', 'Name': name, 'Location': location, 'color': color[1]})
+
+
+@app.route('/results')
+def results():
+    db = get_db()
+    cur = db.execute('SELECT id, name, location FROM users')
+    results = cur.fetchall()
+    return "<h1>{} : {} from {}.</h1>".format(results[0]['id'], results[0]['name'], results[0]['location'])
 
 
 if __name__ == '__main__':
