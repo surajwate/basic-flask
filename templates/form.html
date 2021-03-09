@@ -3,7 +3,7 @@
 {% block title %}The Form{% endblock %}
 
 {% block content %}
-
+{{ super() }}
 <h1>Please fill the form.</h1>
 <form method="POST" action='/theform'>
     <input type="text" name="name">
