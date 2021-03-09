@@ -57,11 +57,14 @@ def theform():
         return render_template('form.html', name=name)
     else:
         name = request.form['name']
-        '''
         location = request.form['location']
-        return "<h1>Hello {} from {}. You have successfully submitted the form.</h1>".format(name, location)
-    '''
-        return redirect(url_for('home', name=name))
+
+        db = get_db()
+        db.execute('insert into users (name, location) values (?, ?)', [name, location])
+        db.commit()
+
+        # return "<h1>Hello {} from {}. You have successfully submitted the form.</h1>".format(name, location)
+        return redirect(url_for('home', name=name, location=location))
 
 
 """
@@ -87,7 +90,7 @@ def results():
     db = get_db()
     cur = db.execute('SELECT id, name, location FROM users')
     results = cur.fetchall()
-    return "<h1>{} : {} from {}.</h1>".format(results[0]['id'], results[0]['name'], results[0]['location'])
+    return "<h1>{} : {} from {}.</h1>".format(results[1]['id'], results[1]['name'], results[1]['location'])
 
 
 if __name__ == '__main__':
