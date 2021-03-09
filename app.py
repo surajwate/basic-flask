@@ -1,9 +1,10 @@
-from flask import Flask, jsonify, request, url_for, redirect, session
+from flask import Flask, jsonify, request, url_for, redirect, session, render_template
 
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'THISISASECRET'
+
 
 @app.route('/')
 def index():
@@ -20,7 +21,7 @@ def home(name):
 @app.route('/json')
 def json():
     name = session['name']
-    return jsonify({'key1': 'value1', 'key2': [1, 2, 3], 'Name' : name})
+    return jsonify({'key1': 'value1', 'key2': [1, 2, 3], 'Name': name})
 
 
 @app.route('/query')
@@ -33,13 +34,7 @@ def query():
 @app.route('/theform', methods=['GET', 'POST'])
 def theform():
     if request.method == 'GET':
-        return """
-                <form method="POST" action='/theform'>
-                    <input type="text" name="name">
-                    <input type="text" name="location">
-                    <input type="submit" value="Submit">
-                </form>
-        """
+        return render_template('form.html')
     else:
         name = request.form['name']
         '''
@@ -47,6 +42,8 @@ def theform():
         return "<h1>Hello {} from {}. You have successfully submitted the form.</h1>".format(name, location)
     '''
         return redirect(url_for('home', name=name))
+
+
 """
 @app.route('/process', methods=['POST'])
 def process():
@@ -54,13 +51,16 @@ def process():
     location = request.form['location']
     return "<h1>Hello {} from {}. You have successfully submitted the form.</h1>".format(name, location)
 """
+
+
 @app.route('/jsonprocess', methods=['POST'])
 def jsonprocess():
     data = request.get_json()
     name = data['name']
     location = data['location']
     color = data['color']
-    return jsonify({'try' : 'error', 'Name' : name, 'Location' : location, 'color' : color[1]}) 
+    return jsonify({'try': 'error', 'Name': name, 'Location': location, 'color': color[1]})
+
 
 if __name__ == '__main__':
     app.run()
