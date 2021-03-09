@@ -1,3 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
 '<h1>Hello {{ name }}. You are on the home page of python app.</h1>'.
 
 {% if display %}
@@ -11,3 +16,4 @@
 {% endfor %}
 
 <img src="{{ url_for('static', filename="images/Atom.jpg") }}" alt="Image of atom.">
+{% endblock %}
