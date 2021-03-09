@@ -1,0 +1,9 @@
+sqlite3 fadb.db
+sqlite> create table users (id integer primary key autoincrement, name text, location text);
+sqlite> .tables
+users
+sqlite> select * from users;
+sqlite> insert into users (name, location) values ('Kumar', 'Patna');
+sqlite> select * from users;
+1|Kumar|Patna
+sqlite> .exit
