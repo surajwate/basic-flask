@@ -34,7 +34,11 @@ def index():
 @app.route('/home/<name>', methods=['GET', 'POST'])
 def home(name):
     session['name'] = name
-    return render_template('home.html', name=name, display=False, colors=['blue', 'orange', 'yellow', 'green'])
+    db = get_db()
+    cur = db.execute('SELECT id, name, location FROM users')
+    results = cur.fetchall()
+    return render_template('home.html', name=name, display=False, \
+        colors=['blue', 'orange', 'yellow', 'green'], results=results)
 
 
 @app.route('/json')
@@ -60,7 +64,8 @@ def theform():
         location = request.form['location']
 
         db = get_db()
-        db.execute('insert into users (name, location) values (?, ?)', [name, location])
+        db.execute('insert into users (name, location) values (?, ?)', [
+                   name, location])
         db.commit()
 
         # return "<h1>Hello {} from {}. You have successfully submitted the form.</h1>".format(name, location)
