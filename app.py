@@ -33,8 +33,9 @@ def query():
 
 @app.route('/theform', methods=['GET', 'POST'])
 def theform():
+    name = session['name']
     if request.method == 'GET':
-        return render_template('form.html')
+        return render_template('form.html', name=name)
     else:
         name = request.form['name']
         '''
